@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.python-version
+
+# Secrets
+.env
+*.key
+secrets/
+
+# Downloads / Outputs
+data/results/
+~/Downloads/
+
+# Lokale Konfiguration
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
