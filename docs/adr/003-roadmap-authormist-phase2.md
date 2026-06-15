@@ -73,6 +73,82 @@ Aufwand: 2–3 Tage Re-Implement + 1 Tag Training.
 
 ---
 
+---
+
+## Optimized Setup — der realistische $5-15-Pfad auf ruediger
+
+Der "naive" Kostenrahmen ($30-60) aus den vorigen Sections gilt nur für Paper-1:1-Replikation.
+Mit drei Hebeln drückt sich das auf **$5-15** und **2-3 h Compute**:
+
+### Hebel 1 — Proxy-Reward (statt direkter Pangram-API)
+
+```
+Phase 1: 200 Pangram-Calls einmalig sammeln (Texte + Scores)  -> $4
+Phase 2: BGE-M3 Embedding + 2-Layer-MLP-Head trainieren       -> $0 (ruediger MLX)
+Phase 3: GRPO nutzt den Proxy als Reward                       -> $0 / Call
+Phase 4: Drift-Check alle 100 Steps mit 1 echtem Pangram-Call -> ~20 Calls = $0.40
+Phase 5: Held-out-Eval 50-100 echte Pangram-Calls              -> $2
+```
+
+**Spart ~90 %** der Pangram-Calls, weil die teure API nur initial + sparse Verification gebraucht wird.
+
+### Hebel 2 — MLX-spezifische Hardware-Optimierungen auf ruediger
+
+| Optimierung | Speedup-Faktor | Implementations-Aufwand |
+|---|---|---|
+| MLX-GRPO statt PyTorch-CPU | 10× (laut [Doriandarko-Repo](https://github.com/Doriandarko/MLX-GRPO)) | 0 — drop-in |
+| 4-bit Quantization (`mlx-community/Qwen2.5-3B-Instruct-4bit`) | 4× weniger Memory, 2× Forward | 0 — Model swap |
+| LoRA-only-Training (mlx-lm-lora, `rank=16`, `q_proj+v_proj`) | 5-10× faster Convergence | 0 — default |
+| Batch-Size 16-32 (statt 4) | 2-3× Throughput | trivial |
+| Frozen Base + Adapter-Only | 3-4× faster pro Step | mlx-tune Config |
+
+### Hebel 3 — Replay-Buffer + Off-Policy-Sampling
+
+Gespeicherte (Text, Reward)-Paare aus früheren Training-Steps wiederverwerten. Klassischer
+DQN/PPO-Trick. Reduziert API-Druck zusätzlich um 30-50 %.
+
+### Realistische Lauf-Bilanz auf ruediger
+
+```
+Phase 1: Initial Sampling          30 min   200 Pangram-Calls = $4
+Phase 2: BGE-M3-Proxy-Train        10 min   $0 (lokal MLX)
+Phase 3: GRPO LoRA-Train           1-2 h    $0 (Proxy als Reward)
+Phase 4: Drift-Verification        5 min    20 echte Pangram-Calls = $0.40
+Phase 5: Held-out-Eval             20 min   100 Calls = $2
+                                  ─────    ────────
+                                  ~2-3 h    $6-8 total (Worst-Case-Limit $15)
+```
+
+→ **20× billiger und 4× schneller** als die paper-naiven $30-60 / 6-10h durch Proxy + 4-bit + LoRA-only.
+
+---
+
+## Trainings-Korpus: NUR fraction_ai = 1.0
+
+User-Direktive 2026-06-15: zum Training ausschließlich Artikel verwenden, die Pangram
+mit **fraction_ai = 1.0** (maximale Detection-Sicherheit) eingestuft hat.
+
+### Verfügbarer Pool aus ki-check.db (Stand 2026-06-15)
+
+| Outlet | n mit fraction_ai = 1.0 | n trainable (Volltext > 500 Zeichen) |
+|---|---|---|
+| Tagesspiegel (TSP) | 113 | 112 |
+| Handelsblatt-Online (HBON) | 77 | 62 |
+| Handelsblatt-Print (HB) | 74 | 59 |
+| Wirtschaftswoche-Online (WWON) | 30 | 18 |
+| Wirtschaftswoche-Print (WW) | 4 | 3 |
+| **Total** | **325** | **254** |
+
+### Empfohlener Split
+
+- **200 Artikel** für Phase 1 (Proxy-Sampling) — stratifiziert nach Outlet
+- **30 Artikel** für Phase 3 (GRPO-Training-Pool, kontinuierliche neue Beispiele)
+- **24 Artikel** als Held-out-Eval (Phase 5, exklusiv)
+
+Code: `src/humanizer/data/load_training_pool.py` lädt + stratifiziert.
+
+---
+
 ## Risiken
 
 | Risiko | Mitigation |
