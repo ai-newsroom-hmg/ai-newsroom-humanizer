@@ -176,3 +176,23 @@ Code: `src/humanizer/data/load_training_pool.py` lädt + stratifiziert.
 - **Inhaltstreuer Humanizer**, der Pangram in 60+ % der Fälle täuscht (Casdorff-Korpus)
 - **Wissenschaftlich publizierbarer Befund**: Pangram-Robustheit-Audit gegen RL-AuthorMist
 - **Empfehlung an Pangram**: konkrete Härtungs-Strategie aus den gefundenen Schwachstellen
+
+---
+
+## UPDATE 2026-06-15 — Hybrid-Vergleich mit StealthRL (siehe ADR 004 + 005)
+
+Recherche-Update hat zwei Game-Changer identifiziert, die diesen ADR ergänzen
+(NICHT ersetzen):
+
+1. **Open Pangram / EditLens** (Pangram-Labs, März 2026): Open-Source-Detector-Modelle lauffähig
+   auf MacBook. **Als Reward-Modell für GRPO-Training nutzbar** → ersetzt teure Pangram-API-Calls
+   durch lokale Inferenz. Reduziert Phase-2-Pangram-Budget von $7-15 auf ~$2-3 (nur Transfer-Test).
+
+2. **StealthRL** (Ranganath & Ramesh, arXiv:2602.08934, Feb 2026): RL-Paraphrase-Attack mit
+   97,6 % Bypass auf 4 Open-Source-Detectors. **Code + Modell-Checkpoint öffentlich**. Pangram
+   NICHT im Eval-Set — die Lücke, die unser Hybrid schließt.
+
+→ **Hybrid-Setup laut ADR 005**: AuthorMist (ADR 003) und StealthRL-Replikation (ADR 004) parallel
+auf demselben Casdorff-Korpus laufen lassen, gegen drei Detector-Tiers (EditLens-Llama,
+EditLens-RoBERTa, Pangram 3.2) vergleichen. Erwartetes Outcome bleibt — Methode wird breiter
+und wissenschaftlich gehärtet.
