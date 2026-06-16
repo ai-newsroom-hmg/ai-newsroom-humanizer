@@ -28,149 +28,45 @@ import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from _openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from humanizer._openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from humanizer.core import (  # noqa: E402
+    DEFAULT_MAX_ITERS,
+    DEFAULT_N_VARIANTS,
+    DEFAULT_THRESHOLD,
+    ProxyScorer,
+    humanize_text,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
 INP_DEFAULT = ROOT / "data" / "phase2-training-pool" / "eval.jsonl"
 OUT = ROOT / "data" / "phase2" / "loop_results.jsonl"
-PROXY_MODEL = ROOT / "data" / "phase2" / "proxy_model.pt"
-PROXY_CONFIG = ROOT / "data" / "phase2" / "proxy_config.json"
 
-THRESHOLD = 0.20
-MAX_ITERS = 5
-N_VARIANTS = 10
+THRESHOLD = DEFAULT_THRESHOLD
+MAX_ITERS = DEFAULT_MAX_ITERS
+N_VARIANTS = DEFAULT_N_VARIANTS
 PARALLEL = 2
 MODEL = MODEL_DEFAULT
 
 
-SYSTEM_PROMPT = """Du bist ein erfahrener deutscher Journalist. Schreibe den
-folgenden Text so um, dass er menschlich klingt — variable Satzlaengen,
-gelegentliche Brueche im Rhythmus, idiomatische Wendungen, eigene Wortwahl.
-Inhalt, Fakten, Namen, Zahlen, Zitate bleiben EXAKT erhalten.
-
-Vermeide:
-- Floskel-Anschluesse ('daher', 'in diesem Kontext', 'vor diesem Hintergrund')
-- Erstens / Zweitens / Drittens-Strukturen
-- Drei parallele Adjektive ('klar, transparent, nachvollziehbar')
-- Glatte Aufzaehlungen
-
-Antworte NUR mit dem umgeschriebenen Text. Keine Vorrede."""
-
-USER_FIRST = "Originaltext:\n\n{text}\n\nMenschlich umgeschrieben:"
-USER_ITER = """Originaltext:
-
-{orig}
-
-Aktuelle Fassung (Proxy-Score = {score:.3f} -- noch zu maschinell):
-
-{current}
-
-Schreibe radikaler menschlich um. Inhalt 100% treu zum Original. NUR Stil."""
-
-
-class ProxyScorer:
-    def __init__(self):
-        import torch
-        from sentence_transformers import SentenceTransformer
-        cfg = json.loads(PROXY_CONFIG.read_text())
-        self.device = "mps" if torch.backends.mps.is_available() else "cpu"
-        self.enc = SentenceTransformer(cfg["embed_model"], device=self.device)
-
-        # Proxy-Head reload
-        from p2_train_proxy import ProxyHead  # noqa: E402
-        sys.path.insert(0, str(ROOT / "src" / "humanizer" / "training"))
-        from p2_train_proxy import ProxyHead
-        self.model = ProxyHead(dim_in=cfg["embed_dim"], hidden=cfg["hidden"]).to(self.device)
-        state = torch.load(PROXY_MODEL, map_location=self.device)
-        self.model.load_state_dict(state["state_dict"])
-        self.model.eval()
-        self.torch = torch
-
-    def score(self, texts: list[str]) -> list[float]:
-        with self.torch.no_grad():
-            emb = self.enc.encode(texts, convert_to_tensor=True, normalize_embeddings=True,
-                                  batch_size=8, show_progress_bar=False).to(self.device)
-            return self.model(emb).cpu().tolist()
-
-
-async def gen_variant(client: ORClient, system: str, user: str, temp: float) -> dict:
-    out = await client.complete(system, user, temperature=temp, max_tokens=3000)
-    return {"text": out["text"].strip(), "cost": out["cost_usd"]}
-
-
 async def loop_one(art: dict, client: ORClient, proxy: ProxyScorer, idx: int) -> dict:
-    orig = art["volltext"]
-    history = [{
-        "iter": 0,
-        "proxy_score": float(proxy.score([orig])[0]),
-        "text_chars": len(orig),
-        "source": "baseline",
-    }]
-
-    current = None
-    current_score = history[0]["proxy_score"]
-    total_cost = 0.0
-    t0 = time.time()
-
-    # Temperaturen-Sweep fuer Diversitaet
-    temps = [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1]
-
-    for it in range(1, MAX_ITERS + 1):
-        if current_score < THRESHOLD:
-            break
-
-        if it == 1:
-            user = USER_FIRST.format(text=orig)
-        else:
-            user = USER_ITER.format(orig=orig, score=current_score, current=current)
-
-        # N Varianten parallel
-        try:
-            results = await asyncio.gather(*[
-                gen_variant(client, SYSTEM_PROMPT, user, temps[i % len(temps)])
-                for i in range(N_VARIANTS)
-            ])
-        except Exception as e:
-            history.append({"iter": it, "error": str(e)[:200]})
-            break
-
-        for r in results:
-            total_cost += r["cost"]
-        variants = [r["text"] for r in results]
-
-        # Proxy bewertet alle
-        scores = proxy.score(variants)
-        idx_best = min(range(len(scores)), key=lambda i: scores[i])
-        best_text = variants[idx_best]
-        best_score = scores[idx_best]
-
-        history.append({
-            "iter": it,
-            "proxy_score": float(best_score),
-            "variants_tested": len(scores),
-            "min_score": float(min(scores)),
-            "max_score": float(max(scores)),
-            "text_chars": len(best_text),
-            "variant_cost": round(sum(r["cost"] for r in results), 6),
-        })
-
-        current = best_text
-        current_score = best_score
-
+    res = await humanize_text(
+        art["volltext"], proxy=proxy, client=client,
+        threshold=THRESHOLD, max_iters=MAX_ITERS, n_variants=N_VARIANTS,
+    )
     return {
         "doc_id": art.get("doc_id"),
         "datum": art.get("datum"),
         "titel": art.get("titel"),
         "quelle": art.get("quelle"),
-        "orig_text": orig,
-        "final_text": current or orig,
-        "proxy_score_pre": history[0]["proxy_score"],
-        "proxy_score_post": current_score,
-        "iterations_run": len(history) - 1,
-        "history": history,
-        "total_cost_usd": round(total_cost, 4),
-        "duration_s": round(time.time() - t0, 1),
+        "orig_text": res.orig_text,
+        "final_text": res.final_text,
+        "proxy_score_pre": res.proxy_score_pre,
+        "proxy_score_post": res.proxy_score_post,
+        "iterations_run": res.iterations_run,
+        "history": res.history,
+        "total_cost_usd": res.total_cost_usd,
+        "duration_s": res.duration_s,
     }
 
 
@@ -189,8 +85,7 @@ async def main():
 
     print(f"\n--- Proxy laden ---", flush=True)
     proxy = ProxyScorer()
-    cfg = json.loads(PROXY_CONFIG.read_text())
-    print(f"    Best val_MAE: {cfg.get('best_val_mae', '?'):.4f}", flush=True)
+    print(f"    Best val_MAE: {proxy.config.get('best_val_mae', '?'):.4f}", flush=True)
 
     client = ORClient(model=MODEL)
     sem = asyncio.Semaphore(PARALLEL)

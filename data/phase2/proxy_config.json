@@ -1,0 +1,9 @@
+{
+  "embed_model": "BAAI/bge-m3",
+  "embed_dim": 1024,
+  "hidden": 256,
+  "best_val_mae": 0.2941252291202545,
+  "n_train": 288,
+  "n_val": 72,
+  "device": "mps"
+}

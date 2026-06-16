@@ -5,8 +5,42 @@
 Aktiver Forschungsprototyp im AI-Newsroom-Stack. Misst empirisch, welche
 KI-Humanizer-Strategien Pangrams AI-Detektor unterlaufen — und welche nicht.
 
-Status: **Phase 1 (Prompt-Engineering / Sentence-Mix) abgeschlossen.**
-Phase 2 (RL-Training gegen Pangram-API, „AuthorMist") als Roadmap dokumentiert.
+Status: **Phase 2 abgeschlossen (5/24 = 21 % Bypass + 24/24 inhalts-treu auf Casdorff).**
+Generisches CLI `humanize` produktionsreif. Phase 3 (echtes RL-Training) als Roadmap.
+
+---
+
+## CLI — `humanize` (generisch, jeder Text)
+
+```bash
+# Setup einmalig
+python3 -m venv .venv && .venv/bin/pip install -e ".[cli]"
+# rsync ruediger:Projects/ai-newsroom-humanizer/data/phase2/proxy_* data/phase2/
+
+# Datei -> Datei
+humanize artikel.txt -o human.txt
+
+# stdin -> stdout
+cat artikel.txt | humanize -
+
+# voller JSON-Trace (Iterations-Historie)
+humanize artikel.txt --json -o trace.json
+
+# mit echter Pangram-API-Eval am Ende (~$0.10)
+humanize artikel.txt --eval -o human.txt
+
+# Tuning
+humanize artikel.txt --threshold 0.25 --max-iters 3 --variants 6
+```
+
+**Wie es funktioniert:** Sonnet 4.5 generiert `--variants` parallele Umschreibungen
+mit Temperatur-Sweep 0.6–1.1. Der Phase-2-Proxy (BGE-M3 + 2-Layer-MLP, val_MAE 0.29)
+bewertet alle Kandidaten lokal auf MPS — die beste wird zur nächsten Iteration. Stopp
+bei `proxy_score < threshold` oder `max_iters`. Inhaltstreue wird mit `--eval` per
+BGE-Sim ≥ 0.85 verifiziert.
+
+**Kosten** (Phase-2-Setting, 10 Varianten × 5 Iter): ~$1 pro Artikel Sonnet, $0 für
+Proxy-Reward. Mit `--eval`: +$0.10 für 2 Pangram-Calls.
 
 ---
 

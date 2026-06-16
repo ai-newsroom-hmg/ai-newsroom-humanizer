@@ -12,7 +12,15 @@ dependencies = [
     "python-docx>=1.1",
 ]
 
+[project.scripts]
+humanize = "humanizer.cli:main"
+
 [project.optional-dependencies]
+cli = [
+    # Reward-Proxy fuer 'humanize'-CLI (BGE-M3 + MLP)
+    "torch>=2.3",
+    "sentence-transformers>=3.0",
+]
 training = [
     # Phase 2: AuthorMist mit MLX-GRPO
     "mlx>=0.20",
