@@ -42,9 +42,7 @@ ruediger steht (MLX-GRPO installiert, Qwen2.5-3B-4bit gecached).
 from __future__ import annotations
 
 import argparse
-import json
 import os
-import sys
 from pathlib import Path
 
 PROJ = Path(__file__).resolve().parents[3]
@@ -74,7 +72,7 @@ def phase_01_initial_sampling():
       # Speichern als JSONL: {doc_id, text_variant, fraction_ai, source}
     """
     print("[Phase 1] STUB — wird implementiert wenn ruediger-Setup steht")
-    print(f"          Erwartet 360 Pangram-Calls (180 Orig + 180 Sonnet-Paraphrasen) = ~$7")
+    print("          Erwartet 360 Pangram-Calls (180 Orig + 180 Sonnet-Paraphrasen) = ~$7")
     print(f"          Output: {PHASE2_DIR / '01_proxy_training_data.jsonl'}")
 
 
@@ -99,7 +97,7 @@ def phase_02_train_proxy():
     Target: val MAE < 0.10 (gut genug als Reward-Proxy).
     """
     print("[Phase 2] STUB — sentence-transformers BGE-M3 + MLP")
-    print(f"          Erwartet 0 Pangram-Calls (lokal)")
+    print("          Erwartet 0 Pangram-Calls (lokal)")
     print(f"          Output: {PHASE2_DIR / '02_proxy_model.safetensors'}")
 
 
@@ -130,8 +128,8 @@ def phase_03_grpo_train():
     Output: LoRA-Adapter unter data/phase2/03_humanizer_lora/.
     """
     print("[Phase 3] STUB — MLX-GRPO + Qwen2.5-3B-4bit + LoRA")
-    print(f"          Erwartet ~20 Pangram-Drift-Calls = ~$0.40")
-    print(f"          Compute: 1-2 h auf ruediger M5 Max 128 GB")
+    print("          Erwartet ~20 Pangram-Drift-Calls = ~$0.40")
+    print("          Compute: 1-2 h auf ruediger M5 Max 128 GB")
     print(f"          Output: {PHASE2_DIR / '03_humanizer_lora'}")
 
 
@@ -152,7 +150,7 @@ def phase_04_eval_holdout():
       - vs Phase-1-Baseline (Strategie 02: 4%, 03: 0%, A: 0%, 05: 40% mit Inhalt-Breach)
     """
     print("[Phase 4] STUB — Held-out Eval (24 Artikel exklusiv)")
-    print(f"          Erwartet 100 Pangram-Calls = ~$2")
+    print("          Erwartet 100 Pangram-Calls = ~$2")
     print(f"          Output: {PHASE2_DIR / '04_eval_results.jsonl'}")
 
 
@@ -163,7 +161,7 @@ def phase_05_report():
     Wiederverwendet humanizer.export.
     """
     print("[Phase 5] STUB — Excel + Word + ADR-Update")
-    print(f"          Output: ~/Downloads/ai-newsroom-humanizer/phase2-<date>/")
+    print("          Output: ~/Downloads/ai-newsroom-humanizer/phase2-<date>/")
 
 
 # ─── CLI ───────────────────────────────────────────────────────────────────

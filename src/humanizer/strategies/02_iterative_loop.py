@@ -22,7 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(Path.home() / "Projects" / "ki-check" / "src"))
-from _openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from _openrouter import MODEL_DEFAULT, ORClient  # noqa: E402
 
 if not os.environ.get("PANGRAM_API_KEY"):
     f = Path.home() / ".config" / "pangram" / "key"
@@ -263,7 +263,7 @@ async def main():
 
     n_ok = sum(1 for r in results if r and "error" not in r)
     n_err = len(results) - n_ok
-    print(f"\n=== FERTIG ===")
+    print("\n=== FERTIG ===")
     print(f"  Artikel:        {len(results)}")
     print(f"  Erfolg (<{THRESHOLD}): {n_success}/{n_ok}")
     print(f"  Fehler:         {n_err}")

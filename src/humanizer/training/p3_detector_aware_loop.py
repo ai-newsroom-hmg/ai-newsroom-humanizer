@@ -29,7 +29,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from humanizer._openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from humanizer._openrouter import MODEL_DEFAULT, ORClient  # noqa: E402
 from humanizer.core import (  # noqa: E402
     DEFAULT_MAX_ITERS,
     DEFAULT_N_VARIANTS,
@@ -83,7 +83,7 @@ async def main():
     print(f"=== Detector-aware Loop: {len(arts)} Artikel ===", flush=True)
     print(f"    THRESHOLD: {THRESHOLD}, MAX_ITERS: {MAX_ITERS}, N_VARIANTS: {N_VARIANTS}", flush=True)
 
-    print(f"\n--- Proxy laden ---", flush=True)
+    print("\n--- Proxy laden ---", flush=True)
     proxy = ProxyScorer()
     print(f"    Best val_MAE: {proxy.config.get('best_val_mae', '?'):.4f}", flush=True)
 
@@ -119,7 +119,7 @@ async def main():
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     n_proxy_success = sum(1 for r in results if r["proxy_score_post"] < THRESHOLD)
-    print(f"\n=== FERTIG ===")
+    print("\n=== FERTIG ===")
     print(f"  Proxy-Bypass (proxy < {THRESHOLD}): {n_proxy_success}/{len(results)}")
     print(f"  Total Sonnet-Kosten: ${total_cost:.4f}")
     print(f"  Output: {OUT}")

@@ -115,7 +115,6 @@ def save_split(split: dict[str, list[dict]], out_dir: Path) -> None:
 
 
 if __name__ == "__main__":
-    import sys
     pool = load_pool()
     print(f"Pool (fraction_ai = 1.0, Volltext > 500 chars): {len(pool)} Artikel")
 

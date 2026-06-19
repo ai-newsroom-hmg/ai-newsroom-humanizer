@@ -19,14 +19,13 @@ import json
 import re
 import shutil
 import statistics
-from collections import Counter
 from datetime import date
 from pathlib import Path
 
 from docx import Document
 from docx.shared import Pt, RGBColor
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -215,7 +214,7 @@ def main():
         ("Stilometric Prompt (Phase 1 A)", 5, "0%", "n/a", "DE", "$0.62"),
         ("Hybrid Sentence-Mix (Phase 1 Str 05)", 5, "40%*", "DESIGN-BREACH", "DE", "$0"),
         ("StealthRL zero-shot (Phase 2 Smoke)", 5, "0%", "n/a", "DE", "$0.10"),
-        (f"Detector-aware Loop (Phase 2 FINAL)", n_total,
+        ("Detector-aware Loop (Phase 2 FINAL)", n_total,
          f"{n_bypass/max(n_total,1):.0%}", f"{n_faith/max(n_total,1):.0%}",
          "DE", f"${total_cost:.2f}"),
     ):
@@ -327,7 +326,7 @@ python3 src/humanizer/training/p5_master_report.py        # lokal
 """, encoding="utf-8")
     print(f"--- Markdown-Summary: {summary_md}")
 
-    print(f"\n=== Phase 2 Final-Resultat ===")
+    print("\n=== Phase 2 Final-Resultat ===")
     print(f"  Bypass:          {n_bypass}/{n_total} ({n_bypass/max(n_total,1):.0%})")
     print(f"  Bypass+Treu:     {n_both}/{n_total}")
     print(f"  Output:          {OUT_DIR}")

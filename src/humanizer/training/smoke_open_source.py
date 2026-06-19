@@ -161,7 +161,7 @@ async def main():
             v["pangram_prediction"] = p.get("prediction")
             f.write(json.dumps(v, ensure_ascii=False) + "\n")
 
-    print(f"\n=== Per-Modell-Verteilung ===", flush=True)
+    print("\n=== Per-Modell-Verteilung ===", flush=True)
     print(f"{'Modell':<48} {'n':>3} {'min':>6} {'mean':>6} {'max':>6} "
           f"{'<0.5':>5} {'<0.2':>5}", flush=True)
     for model in MODELS:
@@ -175,7 +175,7 @@ async def main():
         print(f"{model:<48} {len(rows):>3} {min(fs):>6.3f} {mean(fs):>6.3f} {max(fs):>6.3f} "
               f"{n_below_5:>5} {n_below_2:>5}", flush=True)
 
-    print(f"\n=== Top-3 Variants pro Modell (sortiert nach fraction_ai aufsteigend) ===",
+    print("\n=== Top-3 Variants pro Modell (sortiert nach fraction_ai aufsteigend) ===",
           flush=True)
     for model in MODELS:
         rows = sorted(

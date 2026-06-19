@@ -166,7 +166,7 @@ async def main():
             f.write(json.dumps(v, ensure_ascii=False) + "\n")
 
     # Bericht
-    print(f"\n=== Per-Doc × Modell ===", flush=True)
+    print("\n=== Per-Doc × Modell ===", flush=True)
     print(f"{'doc_id':<24} {'model':<32} {'n':>3} {'min':>6} {'mean':>6} {'<0.5':>5} {'<0.2':>5}",
           flush=True)
     for art in arts:
@@ -182,7 +182,7 @@ async def main():
                   f"{min(fs):>6.3f} {mean(fs):>6.3f} "
                   f"{sum(1 for x in fs if x<0.5):>5} {sum(1 for x in fs if x<0.2):>5}", flush=True)
 
-    print(f"\n=== Bewegung-Verteilung über Temp ===", flush=True)
+    print("\n=== Bewegung-Verteilung über Temp ===", flush=True)
     by_temp: dict[float, list[float]] = {}
     for v in variants_all:
         if v.get("pangram_fraction_ai") is None:
@@ -193,7 +193,7 @@ async def main():
         print(f"  temp={t:>5}: n={len(fs)} min={min(fs):.3f} mean={mean(fs):.3f} "
               f"max={max(fs):.3f} <0.5: {sum(1 for x in fs if x<0.5)}", flush=True)
 
-    print(f"\n=== Top-5 Variants gesamt ===", flush=True)
+    print("\n=== Top-5 Variants gesamt ===", flush=True)
     sorted_v = sorted([v for v in variants_all if v.get("pangram_fraction_ai") is not None],
                       key=lambda x: x["pangram_fraction_ai"])[:5]
     for v in sorted_v:

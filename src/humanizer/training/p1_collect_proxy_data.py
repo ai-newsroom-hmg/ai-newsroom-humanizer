@@ -23,7 +23,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from _openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from _openrouter import MODEL_DEFAULT, ORClient  # noqa: E402
 
 if not os.environ.get("PANGRAM_API_KEY"):
     f = Path.home() / ".config" / "pangram" / "key"
@@ -143,7 +143,7 @@ async def main():
     print(f"  -> {len(para_results)} Paraphrasen, total ${total_sonnet_cost:.2f}", flush=True)
 
     # Pangram-Scores: Originale + Paraphrasen
-    print(f"\n--- Phase 1.2: Pangram-Scores (Cache-aware) ---", flush=True)
+    print("\n--- Phase 1.2: Pangram-Scores (Cache-aware) ---", flush=True)
     items = []
     for r in para_results:
         items.append((f"orig__{r['doc_id']}", r["orig_text"]))
@@ -182,7 +182,7 @@ async def main():
     n_orig_ok = sum(1 for p in pairs if p["orig_fraction_ai"] is not None)
     n_para_ok = sum(1 for p in pairs if p["para_fraction_ai"] is not None)
     n_para_below = sum(1 for p in pairs if (p["para_fraction_ai"] or 1.0) < 0.5)
-    print(f"\n=== FERTIG ===")
+    print("\n=== FERTIG ===")
     print(f"  Pairs:                {len(pairs)}")
     print(f"  Orig-Scores OK:       {n_orig_ok}")
     print(f"  Para-Scores OK:       {n_para_ok}")

@@ -34,8 +34,8 @@ def load_eval_articles(limit: int = 5) -> list[dict]:
 def setup_editlens_detector():
     """EditLens-RoBERTa-large lokal als AI/Human-Classifier laden."""
     print("[detector] EditLens-RoBERTa-large laden...", flush=True)
-    from transformers import AutoTokenizer, AutoModelForSequenceClassification
     import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     model_id = "pangram/editlens_roberta-large"
     tok = AutoTokenizer.from_pretrained(model_id)
@@ -58,8 +58,8 @@ def setup_editlens_detector():
 def setup_mage_detector():
     """MAGE-Detector als Fallback (publik verfuegbar, kein Token)."""
     print("[detector] MAGE als Fallback laden...", flush=True)
-    from transformers import AutoTokenizer, AutoModelForSequenceClassification
     import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     model_id = "yaful/MAGE"
     tok = AutoTokenizer.from_pretrained(model_id)
@@ -79,9 +79,9 @@ def setup_mage_detector():
 def setup_stealthrl_paraphraser():
     """StealthRL als PEFT-Adapter auf Qwen3-4B (oder welches Base-Modell laut Modell-Card)."""
     print("[paraphraser] StealthRL-Adapter laden...", flush=True)
+    import torch
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    import torch
 
     # Base-Modell laut StealthRL-Paper: Qwen3-4B
     base_id = "Qwen/Qwen3-4B"
@@ -91,11 +91,11 @@ def setup_stealthrl_paraphraser():
     print(f"[paraphraser] Tokenizer geladen, vocab={len(tok)}", flush=True)
 
     base = AutoModelForCausalLM.from_pretrained(base_id, torch_dtype=torch.bfloat16)
-    print(f"[paraphraser] Base-Model geladen", flush=True)
+    print("[paraphraser] Base-Model geladen", flush=True)
 
     model = PeftModel.from_pretrained(base, adapter_id)
     model.eval()
-    print(f"[paraphraser] StealthRL-Adapter aufgespielt", flush=True)
+    print("[paraphraser] StealthRL-Adapter aufgespielt", flush=True)
 
     PROMPT = ("Please paraphrase the following text while maintaining its meaning and style. "
               "Preserve every source claim, keep the paraphrase close to the original length, "

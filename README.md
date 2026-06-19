@@ -1,164 +1,239 @@
-# ai-newsroom-humanizer
+# Palimpsest
 
-**Test-Korpus + Humanizer-Werkstatt für die Frage: Lässt sich Pangram austricksen?**
+> Παλίμψηστος (palímpsēstos): wieder abgeschabt. In der Antike: Manuskripte, deren ursprüngliche
+> Schrift weggekratzt wurde, um neuen Text aufzunehmen — die alte Schicht aber schimmerte durch.
 
-Aktiver Forschungsprototyp im AI-Newsroom-Stack. Misst empirisch, welche
-KI-Humanizer-Strategien Pangrams AI-Detektor unterlaufen — und welche nicht.
+**Palimpsest** ist ein Forschungs-Werkzeug aus dem HMG AI-Newsroom. Es überschreibt von
+KI generierten Text so lange, bis der KI-Detektor [Pangram](https://www.pangram.com/) keinen
+Maschinenursprung mehr erkennt — der Inhalt aber semantisch erhalten bleibt.
 
-Status: **Phase 2 abgeschlossen (5/24 = 21 % Bypass + 24/24 inhalts-treu auf Casdorff).**
-Generisches CLI `humanize` produktionsreif. Phase 3 (echtes RL-Training) als Roadmap.
+Anlass war die Affäre um Stephan-Andreas Casdorff (Tagesspiegel, Juni 2026): Pangram hatte
+mehrere seiner Meinungsbeiträge als KI-generiert geflaggt. Die Frage: **Lässt sich der
+Detektor verlässlich austricksen — und was sagt das über Sinn und Grenze solcher Detektoren?**
+
+Antwort: Ja, mit Best-of-N Mistral-3.2 + BGE-Faithfulness-Gate + Pangram-Ranking erreichen
+wir **75 % Doc-Bypass auf einem Casdorff-Härtefall-Korpus (n=12) und 75 % auf 4 OOD-Docs**
+(ADR 009, Phase 3b). Auf einem 8.500-Zeichen Meinungsbeitrag: **Pangram-Pre 0.654 → Post 0.000**
+(klassifiziert als „Human"). Das Tool ist als wissenschaftlicher Nachweis konzipiert,
+nicht als Produktiv-Tool für Täuschung — siehe `ETHICS.md` und Dual-Use-Disclaimer unten.
+
+[![CI](https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer/actions)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
 ---
 
-## CLI — `humanize` (generisch, jeder Text)
+## Empirische Befunde (Phase 3b, 2026-06-19)
+
+| Sample | Setup | Doc-Bypass | Faith-Rate |
+|---|---|---:|---:|
+| 12 Casdorff-Härtefälle (Pangram-Pre 1.0) | Best-of-50, BGE ≥ 0.85 | **9/12 = 75 %** | 81 % |
+| 4 OOD (verschiedene Autoren) | Best-of-30 | **3/4 = 75 %** | 65 % |
+| 8.516-char Meinungsbeitrag | chunked Best-of-24 | **Pangram 0.654 → 0.000** | global BGE 0.846 |
+
+Per-Variant-Bypass-Rate (faithful + Pangram <0.2): **5.7 %**, sehr nahe an Phase-3a-Rate (4.5 %).
+Modelliert: Best-of-100 erreicht 99 % Doc-Coverage.
+
+Volle ADR: [`docs/adr/009-phase3b-best-of-50-production.md`](docs/adr/009-phase3b-best-of-50-production.md)
+
+---
+
+## Installation
 
 ```bash
-# Setup einmalig
-python3 -m venv .venv && .venv/bin/pip install -e ".[cli]"
-# rsync ruediger:Projects/ai-newsroom-humanizer/data/phase2/proxy_* data/phase2/
+# direkt aus GitHub:
+pip install git+https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer.git
 
-# Datei -> Datei
-humanize artikel.txt -o human.txt
-
-# stdin -> stdout
-cat artikel.txt | humanize -
-
-# voller JSON-Trace (Iterations-Historie)
-humanize artikel.txt --json -o trace.json
-
-# mit echter Pangram-API-Eval am Ende (~$0.10)
-humanize artikel.txt --eval -o human.txt
-
-# Tuning
-humanize artikel.txt --threshold 0.25 --max-iters 3 --variants 6
+# oder lokaler Clone für Entwicklung:
+git clone https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer.git
+cd ai-newsroom-humanizer
+pip install -e ".[dev]"
 ```
 
-**Wie es funktioniert:** Sonnet 4.5 generiert `--variants` parallele Umschreibungen
-mit Temperatur-Sweep 0.6–1.1. Der Phase-2-Proxy (BGE-M3 + 2-Layer-MLP, val_MAE 0.29)
-bewertet alle Kandidaten lokal auf MPS — die beste wird zur nächsten Iteration. Stopp
-bei `proxy_score < threshold` oder `max_iters`. Inhaltstreue wird mit `--eval` per
-BGE-Sim ≥ 0.85 verifiziert.
-
-**Kosten** (Phase-2-Setting, 10 Varianten × 5 Iter): ~$1 pro Artikel Sonnet, $0 für
-Proxy-Reward. Mit `--eval`: +$0.10 für 2 Pangram-Calls.
+**Voraussetzungen:**
+- Python ≥ 3.11
+- Apple Silicon (MPS) oder CUDA empfohlen für BGE-M3-Embeddings (CPU funktioniert, langsamer)
+- API-Keys in `~/.config/<service>/key`:
+  - `~/.config/openrouter/key` — OpenRouter für Mistral-3.2-24b-instruct
+  - `~/.config/pangram/key` — Pangram Detector-API (für `--eval` + Live-Mode)
 
 ---
 
-## Worum es geht
-
-Aufgabe (Auftrag 2026-06-15):
-> „Wir wollen zeigen, dass die als KI klassifizierten Artikel mit Hilfe von KI auch wieder in
-> menschlich aussehende umgewandelt werden können. Der Inhalt darf aber nicht verfälscht werden."
-
-Test-Korpus: 34 Tagesspiegel-Kommentare von **Stephan-Andreas Casdorff** (Mitherausgeber),
-alle von Pangram mit `fraction_ai = 1.0` als KI eingestuft.
-
-Strategie: drei Humanizer-Familien bauen, identische Stichprobe, Pangram pre/post.
-
----
-
-## Empirische Befunde (Stand 2026-06-15)
-
-| Strategie | Methode | Erfolg (P(AI) < 0.2) | Faithfulness | Kosten/Artikel |
-|---|---|---|---|---|
-| **02 — Iterative Single-Model** | Sonnet-Loop, Best-of-3, max 5 Iter | **1/25 = 4 %** | 44 % FAITHFUL | $0.35 |
-| **03 — Multi-Model Recursive** | Sonnet → GPT-4o → Gemini → Sonnet | **0/5 = 0 %** | n/a (Pilot) | $0.05 |
-| **A — Stilometric Prompt** | Casdorff-Stilprofil (28 Human-Artikel) im System-Prompt | **0/5 = 0 %** | (Pilot) | $0.12 |
-| **05 — Hybrid Sentence-Mix** | Echte Casdorff-Human-Sätze in den KI-Text injizieren | **2/5 = 40 %** | **DESIGN-BREACH** (semantisch) | $0 (kein LLM) |
-| **06 — Mikro-Adversarial** | Whitespace + Unicode-Homoglyph (SpaceInfi, Creo) | als Lift in 05 | n/a | $0 |
-
-**Schluss aus den Daten:** Pangram hält gegen **prompt-engineered Sonnet-Paraphrase** robust
-(0–4 %), unabhängig von Iteration, Multi-Model-Mix oder empirisch gemessenem Stil-Profil.
-Hybrid-Edit funktioniert (40 %), verletzt aber Inhaltstreue (fremde Casdorff-Sätze aus anderen
-Artikeln werden eingestreut). Die wissenschaftlich belegt erfolgreiche Variante — AuthorMist mit
-RL-Training gegen Pangram-API — ist als Roadmap dokumentiert (`docs/adr/003-roadmap-authormist.md`).
-
----
-
-## Verzeichnisstruktur
-
-```
-src/humanizer/
-  _openrouter.py             — OpenRouter-Client (anthropic/Sonnet, openai/GPT-4o, google/Gemini)
-  profile_extractor.py       — Stilometrie aus echten Human-Artikeln (Satzlängen, Vokabular, Anti-Pattern)
-  faithfulness.py            — LLM-Judge + deterministische Strukturchecks (n-gram, Namen, Zahlen)
-  export.py                  — Pre/Post-Excel + Word-Files mit Pangram-Box
-  strategies/
-    02_iterative_loop.py     — AuthorMist-light: Sonnet-Loop mit Pangram-Feedback
-    03_multimodel.py         — Sonnet → GPT-4o → Gemini → Sonnet recursive
-    05_hybrid_edit.py        — Sentence-Mix + Mikro-Adversarial-Layer
-    A_stilometric_prompt.py  — Casdorff-Stilprofil im System-Prompt
-
-docs/adr/                    — Architektur-Entscheidungen
-data/profiles/casdorff.json  — extrahiertes Casdorff-Stilprofil (28 Artikel, 1117 Sätze)
-data/test-corpora/casdorff-2026-06-15/ — alle Pilot-Resultate als JSONL (reproduzierbar)
-```
-
----
-
-## Voraussetzungen
-
-- Python ≥ 3.11 + venv (`uv pip install -e .` oder `pip install httpx anthropic openpyxl python-docx`)
-- `~/.config/openrouter/key` — OpenRouter API-Key (für anthropic/openai/google via einem Provider)
-- `~/.config/pangram/key` — Pangram API-Key (Account `pangram.com`)
-- `~/Projects/ki-check/data/ki-check.db` — Test-Korpus (huGO+-Artikel + Pangram-Werte)
-
-Optional für Roadmap-Phase 2:
-- ruediger (M-Class Mac mit MLX) für AuthorMist-RL-Training
-- Qwen2.5-3B-Instruct (HuggingFace) als Base-Model
-
----
-
-## Lauf
+## Quickstart
 
 ```bash
-# 1. Stilprofil eines Autors extrahieren (28 Human-Artikel → Satzlängen, Vokabular, Anti-Pattern)
-python -m humanizer.profile_extractor --autor "Casdorff" --out data/profiles/casdorff.json
+# whole-text Best-of-24 mit Pre/Post-Pangram-Eval (~$1-2)
+palimpsest artikel.txt --eval
 
-# 2. Humanize-Strategie laufen lassen (gegen 5 AI-eingestufte Artikel als Pilot)
-HUMANIZE_LIMIT=5 python -m humanizer.strategies.A_stilometric_prompt
+# long-form chunked Best-of-24 (auto bei >4000 chars)
+palimpsest lange-meinung.txt --chunked --eval -o human.txt
 
-# 3. Faithfulness-Check
-python -m humanizer.faithfulness
+# stdin → stdout
+cat artikel.txt | palimpsest - --variants 12
 
-# 4. Excel + Word-Export
-python -m humanizer.export
+# Voller JSON-Trace mit allen Varianten
+palimpsest artikel.txt --json -o trace.json --eval
+
+# Rollback-Pfad (Sonnet-Loop, Phase 2, RTO < 30s)
+palimpsest artikel.txt --legacy
 ```
 
-Output landet in `~/Downloads/ai-newsroom-humanizer/<autor>-<datum>/`.
+### Dev/Staging-Modi
+
+**Dev** (Default): Live OpenRouter + Live Pangram-API. Echte Performance, echte Kosten.
+
+```bash
+palimpsest artikel.txt --env dev --eval   # = default
+```
+
+**Staging**: Pangram-Antworten aus Cache (kein API-Cost, deterministisch).
+UNBEDINGT-Skill 2 Live-Parity erfüllt: Cache stammt aus echten Live-Calls.
+
+```bash
+# 1) Pangram-Cache + Test-Korpus liegen unter tests/staging_corpus/
+PALIMPSEST_ENV=staging \
+PALIMPSEST_PANGRAM_CACHE=tests/staging_corpus/mini_pangram_cache.json \
+palimpsest tests/staging_corpus/sample.txt --eval
+
+# 2) Oder via --env Flag (wins over env-var)
+palimpsest tests/staging_corpus/sample.txt --env staging --eval
+```
+
+**Optional Ollama** (für Compute-Spar, z.B. lokales `mistral-small-3.2:24b` via Ollama):
+
+```bash
+PALIMPSEST_OLLAMA_URL=http://ruediger:11434 palimpsest artikel.txt --env staging
+```
+
+*(Ollama-Routing ist als Feature-Flag vorbereitet; ORClient-Anbindung erfolgt in v0.3.)*
 
 ---
 
-## Wissenschaftlicher Stand 2026
+## Wie es funktioniert (Pipeline)
 
-Stand der Forschung (Recherche dokumentiert in `docs/adr/001-state-of-research.md`):
+```
+Input-Text
+   │
+   ├─[Pangram-Pre]──► fraction_ai < 0.2? → Skip
+   │
+   ├─[Auto-Chunked bei >4000 chars]
+   │   └─ split_paragraphs (robust gegen single-\n iCloud-Drift)
+   │
+   ├─[Best-of-N Mistral-3.2-24b-instruct] (parallel, Temp-Sweep 0.85–1.15)
+   │
+   ├─[BGE-M3 Multi-Chunk Similarity] (min-Aggregation, MPS/CPU)
+   │   └─ Filter ≥ BGE_THRESHOLD (0.85) → faithful-Variants
+   │
+   ├─[Pangram Live-Rank] (auf faithful Variants)
+   │
+   └─[Best = (lowest pangram_fraction_ai, highest bge_sim)]
+       │
+       └─► Output: humanisierter Text
+```
 
-- **AuthorMist** (David & Gervais, ETH Zürich 2025, [arXiv:2503.08716](https://arxiv.org/abs/2503.08716))
-  Qwen2.5-3B + GRPO mit Detektor-API als Reward → 78,6–96,2 % Bypass auf GPTZero, WinstonAI,
-  Originality.ai, Sapling. Inhaltstreue Similarity > 0,94. **Pangram nicht im Eval** — Forschungslücke.
-- **AuthorMix** (Saarland 2026-03, [arXiv:2603.23069](https://arxiv.org/abs/2603.23069))
-  Layer-wise Adapter Mixing, „handful" Beispiele für neuen Autor. Schlägt GPT-5.1 für low-resource.
-  Code noch nicht öffentlich. MLX-tauglich.
-- **DAMAGE** (Pangram Labs 2025, [arXiv:2501.03437](https://arxiv.org/abs/2501.03437))
-  Pangram greift sich selbst mit fine-tuned Attack-Model an — bleibt nach Selbstangabe robust durch
-  „cross-humanizer generalization". Hersteller-Studie, Bias-Vorbehalt.
-- **„Base Models Look Human"** (2026, [arXiv:2605.19516](https://arxiv.org/abs/2605.19516))
-  Manche Base-LLMs werden bereits ohne Fine-Tuning als Human eingestuft — verschiebt Spiel von
-  „austricksen" zu „richtiges Model wählen".
-
----
-
-## Lizenz / Ethik
-
-Dual-Use-Forschung. Veröffentlichung im AI-Newsroom-Kontext: Nachweis der Robustheits-Grenzen
-kommerzieller AI-Detektoren, **NICHT** als Anleitung zur Täuschung in journalistischen oder
-akademischen Produktivkontexten. Tests laufen ausschließlich auf eigenem Korpus + eigenen
-Tagesspiegel-Artikeln (HMG-Lizenz).
-
-Pangram-API-Calls aus `~/.config/pangram/key` mit Budget-Guard.
+Architektur-Details: [`docs/adr/009-phase3b-best-of-50-production.md`](docs/adr/009-phase3b-best-of-50-production.md)
 
 ---
 
-## Autor
+## Kosten
 
-Almagenic / HMG AI-Newsroom · Forschungsprototyp · 2026-06-15
+| Setup | Per-Artikel-Cost | Bypass-Rate |
+|---|---|---|
+| Best-of-12 (short Text) | ~$0.50 | ~50 % |
+| Best-of-24 (Standard) | ~$1.50 | ~67 % (Phase 3a empirisch) |
+| Best-of-50 (Härtefälle) | ~$3.00 | ~75 % (Phase 3b empirisch) |
+| Best-of-100 (Maximum) | ~$6.00 | ~99 % (modelliert) |
+| Chunked Best-of-24 (lange Texte) | ~$5.00 | Pangram 0 möglich |
+
+Pangram dominiert die Cost (~95 % des Budgets). BGE-Filter ≥ 0.85 vor Pangram spart ~30 %.
+
+---
+
+## Entwicklung
+
+```bash
+pip install -e ".[dev]"
+pytest tests/ -v        # 16 Tests, läuft ohne API-Keys (staging-mode)
+ruff check src/ tests/  # Lint
+```
+
+CI: `.github/workflows/ci.yml` — Python 3.11+3.12, pytest + ruff in staging-mode.
+
+---
+
+## Lehren aus Phase 1-3b (siehe ADRs)
+
+1. **Multi-Chunk-BGE-Sim ist Pflicht für lange Texte.** Truncated single-shot BGE
+   maskiert Mid-Document-Token-Drift (Pangram 0.0 + BGE 0.94 sah grün aus, Output
+   war kaputt). Multi-Chunk min-Aggregation ist konservativ + robust.
+
+2. **iCloud-Sync nivelliert `\n\n` auf `\n`.** Paragraph-Splitter muss Fallback haben.
+
+3. **n=3 ist nie genug für Bypass-Statistiken.** Phase-3-Smoke (n=3) zeigte 100 %, Phase-3a (n=12)
+   korrigierte auf 42 %. Minimum: n=12 length-stratifiziert.
+
+4. **Length-Robustheit ist modell-spezifisch.** Pangrams „99 % accuracy on long text" gilt für
+   GPT-Class-Paraphrase, nicht für Mistral-3.2. Bei jeder neuen Base-LLM-Familie Length-Strat neu testen.
+
+5. **Best-of-N statt Single-Shot.** Pro-Variant-Bypass-Rate stabil 4.5–5.7 %, Doc-Coverage skaliert
+   mit N: `1 − (1−p)^N`.
+
+6. **Faithfulness-Gate vor Bypass-Ranking.** 73 % der Bypass-Varianten wären ohne BGE-Filter
+   semantisch verfälscht durchgegangen.
+
+---
+
+## Dual-Use & Ethik
+
+Dieses Tool dokumentiert die **Robustheits-Grenzen kommerzieller AI-Detektoren** im
+journalistischen Kontext. Es ist **nicht** als Produktiv-Werkzeug zur Verschleierung
+unmarkierter KI-Texte in journalistischen oder akademischen Veröffentlichungen gedacht.
+
+**Berechtigte Nutzung:**
+- Wissenschaftliche Untersuchung von Detektor-Robustheit (Adversarial Testing)
+- Newsroom-Audits: Wie verlässlich sind Detektoren, die wir intern oder extern einsetzen?
+- Forschung zu KI-Generierungs-/Detektions-Wettrüsten (Stand der Forschung: AuthorMist
+  arXiv:2503.08716, DAMAGE arXiv:2501.03437, Jabarian/Imas 2025)
+
+**Nicht-berechtigte Nutzung:**
+- Verschleierung von KI-Beteiligung in Texten, die unter eigenem Namen veröffentlicht werden
+- Umgehung von Kennzeichnungspflichten (EU AI Act Art. 50, Newsroom-internen Richtlinien)
+
+Siehe auch:
+- C2PA-Newsroom-Disclosure-Pattern (Memory: `c2pa-newsroom-disclosure-pattern`)
+- EU AI Act Art. 50 (Memory: `eu-ai-act-art-50-disclosure-pflicht`)
+
+---
+
+## Roadmap
+
+- **v0.3**: Ollama-Routing für Mistral-3.2-24b auf ruediger (kostenfrei lokal)
+- **v0.4**: GRPO + LoRA-Training auf Mistral-3.2 für 1-Shot Bypass (AuthorMist-Pfad, ADR 008 §C)
+- **v0.5**: Adversarial Paraphrasing mit Detector-Gradient (arXiv:2506.07001, 87.88 % TPR-Drop)
+- **v1.0**: C2PA Content-Credentials-Integration — Tool signiert KI-Beteiligung statt sie zu verschleiern
+
+---
+
+## Lizenz
+
+Apache-2.0. Siehe [`LICENSE`](LICENSE).
+
+## Autoren / Beteiligte
+
+- Gunter Nowy ([@gunternowy](https://github.com/gunternowy)) — Almagenic / HMG AI-Newsroom
+- Forschungs-Stack 2026: AI-Newsroom, Mindloom (Knowledge Engine), Enzyme (Vault Catalysts)
+
+---
+
+## Zitation
+
+```bibtex
+@software{palimpsest_2026,
+  author = {Nowy, Gunter},
+  title = {Palimpsest: Empirische Robustheits-Audits von KI-Detektoren in deutschen journalistischen Texten},
+  year = {2026},
+  publisher = {GitHub},
+  url = {https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer},
+  version = {0.2.0},
+}
+```

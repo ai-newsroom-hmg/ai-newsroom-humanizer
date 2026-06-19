@@ -27,3 +27,31 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Pytest / Ruff
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+
+# Phase 2 Proxy-Model (groß, rsync from ruediger)
+data/phase2/proxy_model.pt
+data/phase2/proxy_training_pairs.jsonl
+data/phase2/eval_results.jsonl
+data/phase2/loop_results.jsonl
+data/phase2/smoke/
+
+# Phase 3b Run-Outputs (regenerable via nightly_run_phase3b)
+data/phase3b/nightly_results.jsonl
+data/phase3b/nightly.log
+
+# Test-Corpora (lokal, evtl. lizenzpflichtig)
+data/test-corpora/target-text-2026-06-18-journalismus-tot.txt
+data/test-corpora/target-demo-2026-06-19.txt
+
+# Lizenzpflichtige Casdorff-Volltexte (Tagesspiegel-Copyright)
+tests/staging_corpus/docs.jsonl
+
+# Big training-pool (rsync from ruediger if needed)
+data/phase2-training-pool/eval.jsonl
+data/phase2-training-pool/train.jsonl

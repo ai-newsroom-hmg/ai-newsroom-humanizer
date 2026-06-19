@@ -1,0 +1,56 @@
+{
+  "orig_chars": 8516,
+  "final_chars": 8493,
+  "bge_sim_global": 0.8460739850997925,
+  "n_generated": 120,
+  "n_faithful": 99,
+  "duration_s": 319.7,
+  "cost_usd": 0.0263,
+  "chunk_results": [
+    {
+      "idx": 0,
+      "chars": 1759,
+      "out_chars": 1757,
+      "bge_sim": 0.9701,
+      "pangram_post": 0.0,
+      "n_faithful": 19,
+      "stopped": "ranked_by_pangram"
+    },
+    {
+      "idx": 1,
+      "chars": 2002,
+      "out_chars": 1850,
+      "bge_sim": 0.9616,
+      "pangram_post": 0.0,
+      "n_faithful": 21,
+      "stopped": "ranked_by_pangram"
+    },
+    {
+      "idx": 2,
+      "chars": 1951,
+      "out_chars": 2047,
+      "bge_sim": 0.9592,
+      "pangram_post": 0.0,
+      "n_faithful": 22,
+      "stopped": "ranked_by_pangram"
+    },
+    {
+      "idx": 3,
+      "chars": 1688,
+      "out_chars": 1749,
+      "bge_sim": 0.8547,
+      "pangram_post": 0.0,
+      "n_faithful": 20,
+      "stopped": "ranked_by_pangram"
+    },
+    {
+      "idx": 4,
+      "chars": 1131,
+      "out_chars": 1082,
+      "bge_sim": 0.8718,
+      "pangram_post": 0.0,
+      "n_faithful": 17,
+      "stopped": "ranked_by_pangram"
+    }
+  ]
+}

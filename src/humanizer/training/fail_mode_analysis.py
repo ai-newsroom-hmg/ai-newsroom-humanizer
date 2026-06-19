@@ -26,7 +26,7 @@ def main() -> None:
         for r in (json.loads(l) for l in LOOP.read_text(encoding="utf-8").splitlines() if l.strip())
     }
 
-    print(f"=== Phase-2 Fail-Mode-Diagnose (ADR 007) ===")
+    print("=== Phase-2 Fail-Mode-Diagnose (ADR 007) ===")
     print(f"n_eval={len(ev)} n_loop={len(loop)}")
 
     pre_human = [r for r in ev if r["pangram_pre"] < 1.0]
@@ -44,11 +44,11 @@ def main() -> None:
         vals = [r[key] for r in rows]
         return f"mean={st.mean(vals):.0f} median={st.median(vals):.0f} min={min(vals)} max={max(vals)}"
 
-    print(f"\nLängen-Verteilung (Konfounder-Check):")
+    print("\nLängen-Verteilung (Konfounder-Check):")
     print(f"  Bypass (n={len(ok)}): {stats(ok, 'orig_chars')}")
     print(f"  Fail   (n={len(fail)}): {stats(fail, 'orig_chars')}")
 
-    print(f"\nProxy-Trajektorie (Loop-Wirkung):")
+    print("\nProxy-Trajektorie (Loop-Wirkung):")
     traj = [
         [h.get("proxy_score") for h in r["history"] if "proxy_score" in h]
         for r in loop.values()
