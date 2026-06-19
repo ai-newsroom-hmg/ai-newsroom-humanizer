@@ -1,30 +1,53 @@
 [project]
-name = "ai-newsroom-humanizer"
-version = "0.1.0"
-description = "Test-Korpus + Humanizer-Werkstatt — empirische Robustheits-Audits von AI-Detektoren (Pangram, GPTZero)"
-authors = [{ name = "Almagenic / HMG AI-Newsroom" }]
+name = "palimpsest"
+version = "0.2.0"
+description = "Newsroom-Tool zur empirischen Untersuchung von KI-Detektor-Robustheit (Pangram) auf deutschen journalistischen Texten — überschreibt KI-Output bis das Detektor-Signal verschwindet."
+authors = [{ name = "Almagenic / HMG AI-Newsroom", email = "gunter.nowy@almagenic.com" }]
 readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+keywords = ["ai-detection", "humanizer", "pangram", "journalism", "newsroom", "german", "mistral", "openrouter", "bge-m3"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: German",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
 
 dependencies = [
     "httpx>=0.27",
     "openpyxl>=3.1",
     "python-docx>=1.1",
-]
-
-[project.scripts]
-humanize = "humanizer.cli:main"
-
-[project.optional-dependencies]
-cli = [
-    # Reward-Proxy fuer 'humanize'-CLI (BGE-M3 + MLP)
     "torch>=2.3",
     "sentence-transformers>=3.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer"
+Repository = "https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer"
+Issues = "https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer/issues"
+Changelog = "https://github.com/ai-newsroom-hmg/ai-newsroom-humanizer/blob/main/CHANGELOG.md"
+
+[project.scripts]
+palimpsest = "humanizer.cli:main"
+humanize = "humanizer.cli:main"  # Legacy-Alias (Rollback-Path, ADR-008)
+
+[project.optional-dependencies]
 training = [
-    # Phase 2: AuthorMist mit MLX-GRPO
+    # Phase 4 (geplant): GRPO + LoRA-Training auf Mistral-3.2 via MLX
     "mlx>=0.20",
     "mlx-lm>=0.18",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.5",
 ]
 
 [build-system]
@@ -33,3 +56,32 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/humanizer"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = [
+    "E501",  # line-too-long, handled by formatter
+    "E741",  # ambiguous variable name (l in jsonl-iter ist idiom)
+    "E701",  # multiple statements on one line (script-tier ok)
+    "E731",  # lambda → def (stilistisch, kein bug)
+    "B007",  # unused loop var (ok in struct iter)
+    "B008",  # function call in default
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Forschungs-Skripte sind bewusst pragmatisch, kein Library-Code:
+"src/humanizer/training/*.py" = ["E402", "F841", "B904", "E702", "F401"]
+"src/humanizer/strategies/*.py" = ["E402", "F841", "B904", "E702", "F401"]
+"src/humanizer/phase3b_export.py" = ["B904"]
+"src/humanizer/export.py" = ["B904", "F841"]
+"src/humanizer/faithfulness.py" = ["B904"]
+"src/humanizer/profile_extractor.py" = ["F841", "B904"]
+"scripts/*.py" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

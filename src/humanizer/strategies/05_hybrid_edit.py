@@ -201,7 +201,7 @@ async def process_article(art: dict, human_pool: list[str], pc: PangramClient,
 
 
 async def main():
-    print(f"--- Hybrid-Edit (Strategie 05) + Mikro-Adversarial (06) ---", flush=True)
+    print("--- Hybrid-Edit (Strategie 05) + Mikro-Adversarial (06) ---", flush=True)
     pool = load_human_pool()
     print(f"    Casdorff-Human-Saetze-Pool: {len(pool)}", flush=True)
     if not pool:
@@ -233,7 +233,7 @@ async def main():
         for r in results:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    print(f"\n=== FERTIG Hybrid-Edit + Mikro ===")
+    print("\n=== FERTIG Hybrid-Edit + Mikro ===")
     print(f"  Erfolg: {n_success}/{len(results)} ({n_success/max(len(results),1):.0%})")
     print(f"  Output: {OUT}")
 

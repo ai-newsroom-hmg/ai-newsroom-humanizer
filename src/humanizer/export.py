@@ -353,7 +353,7 @@ def main():
 
     wb.save(XLSX)
     print(f"--- Excel: {XLSX}")
-    print(f"\n=== Bypass-Resultat ===")
+    print("\n=== Bypass-Resultat ===")
     print(f"  Erfolg: {n_success}/{n_total} ({n_success/max(n_total,1):.0%})")
     print(f"  Ø Iterationen: {avg_iters:.1f}")
     print(f"  Ø fraction_ai-Drop: {avg_drop:.3f}")

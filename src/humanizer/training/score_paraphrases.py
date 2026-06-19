@@ -27,9 +27,9 @@ def main():
     rows = [json.loads(l) for l in in_fp.read_text(encoding="utf-8").splitlines() if l.strip()]
     print(f"=== Score {len(rows)} Paraphrasen ===", flush=True)
 
-    from transformers import AutoTokenizer, AutoModelForSequenceClassification
-    from sentence_transformers import SentenceTransformer
     import torch
+    from sentence_transformers import SentenceTransformer
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     print("[detector] chatgpt-detector-roberta laden...", flush=True)
     DET = "Hello-SimpleAI/chatgpt-detector-roberta"

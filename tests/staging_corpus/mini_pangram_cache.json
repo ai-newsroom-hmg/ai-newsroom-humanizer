@@ -1,0 +1,605 @@
+{
+  "9231f6cb3007d4e52ad1b41425106b8c848e5a896354fd68bdff418f21c40313": {
+    "fraction_ai": 1.0,
+    "fraction_ai_assisted": 0.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "eb3d85789ab09b7ca4299b85b98a1fc540b2314b42f97de96bfcefc4e2dde025": {
+    "fraction_ai": 1.0,
+    "fraction_ai_assisted": 0.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "cd0f116df943b2330f2fbb3850baa07ebf90dbb07946d1525d9fb290cceb86e6": {
+    "fraction_ai": 1.0,
+    "fraction_ai_assisted": 0.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "970fccf9048eb3807bae6ec1c0ec504bbef78ece4f19975266f998df383ab198": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "1439e39700067cb73dd7f503ad2394930e34a069e69fbb5148bc4afbe4250df4": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8ab69b5929cb403e7b40bd006be261157d07fe599407c5075c80bbe771a1be6a": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e821a0c4058659ca999ab321ee9bd42d3355bae3917f3cbc09489608457cfbab": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "5d151bb2636e599c1c52e11b3a4b7044d0e865f2c217ceba447255a7cbbd5e52": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "68c3134f7cbc4946c8af416bd86c112886b6f5f36f93a463c9cce539f008a92b": {
+    "fraction_ai": 0.0,
+    "fraction_human": 0.0,
+    "prediction": "Mixed"
+  },
+  "d83e9d08f63aef12307cd8bb107a5cc400bbebf57e12e43a72ac12adab8940b6": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "575770721521ff947beb05aa378049cde54fc468ba501dd6904d6c5b556e8cc0": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "47012741023e188375a839abc943dc8cbeeaaa0b44ef24ee2e2d10e9a7bfbd97": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e61b1c9749593cd517c6cf0efecf8199e8ca3cb0e7684bf9599559669a1cfabd": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e6710e5d344087f78ed4528f8b7db2a9683c368c9605b7d980008b317caf6839": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "ebcc7282b0f059c4b0d2f2780bac451834dadf445b21a34f7ac6f4ddb9235c03": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6ee71bf0c411acd99c692ea2c408b4f074a98bd360ef1bc834cb5d0ba4350fb9": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0ceda3a40b4bfeb5f8ca62b9bbd8eeefa9b3afa93b46c945ac88d472b27996e9": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "882c687302adfbea13fb0b678a8db05d1ed8a60d8172f7d914c125be66d8b0d7": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "207423d802048e5602327c6cc8c1b3e930569a5fef669ea59d1314f098e7b948": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "c8f0e365a13fe54b80fdea4230817e10816641a9e451787460584c8c9c11752d": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "1ec20ae6a7233a407d03d9c7e1f3fb4872b77d866b237adba4697926fb9f82f6": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "ba18fbd2f65f38a22c0830a6a44a584245fdc800c91da54dff936a1d37e46714": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "63afce0951cc5d01eecca85c3df9ee23ecc5838c0aa915b9937a44cd5084847d": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "d1ef3fa3d9e46733a34f1f5d3c228574e4597cd42afca1e675d1b842c3f4c3e2": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8f8c923e02f6be7a9369d8b7f814cc5b0b012c9a0516e69d683d4c94cbe0ad56": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "a1ae4f99a3f1d1036d12d0409dc36e85591ccddc54090de6cd65e250e4690a94": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "f577ff0733d71f1fc5ebd887c4602abc1195f99e436d7c1145f08815b60a0e6d": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "5f4b12229ecfd40a1c84f8f71b41faba3c7ef45f0eb8a408337bd3bacf54f589": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a00383c7493a8a0ac3b7b9df2fa0a73a9fa6206c74cf5a5859dc2ac2b9c1d0fc": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6f6dddf8dc49591fe2f54e8a95c8bee617b037a164e5bbb1466d3deb778bd0fb": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "7d398820dfb861d2f24ddc1771fb27103063800fd5b52488e58054eedc560d3f": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "7f8139176b049500bb5b1aa89da14a71d7fc2a331da51014219d791811f9d181": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6eeb50e7f98103247a5aab1295cf0b5c2ec6287289a8f632abed9ce135945c41": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8802fb8747d79b2e3b91564716b21f4685826411ea0d62aa27bbd9dcdbfb5219": {
+    "fraction_ai": 0.0,
+    "fraction_human": 0.0,
+    "prediction": "Mixed"
+  },
+  "7e9ea749307b62dde17688f884a967d66f633074d2ca2e76555235bfd9757938": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "fc0058e99124d0f42f7a6322e633e3650cc98ebfe21be6f30263b57b85270daf": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6608e05433298be700e802ce8e1a6f57cd2f2768f3933aae8aceee1dfc1f7eff": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e317e7876eacacb4f652d2af91daa27eb67b6447435471ddb49af3fba75bcabb": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "f41bda6adcb38ca85401985b6d62f730ecd3834904b3d00c669a02e6adb44e8e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "b44a8d71b5efff6a97f5a503f4fa889b31fab78e4611a09bf0a6533b15605f62": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e9f09ce705e7f792f43f8c1b863946e042b11550cfe607938992a1072a741a20": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "7cc5b5c8d49981e8fc7c9b77cac8b7d7757239b6057294514c61968d4239f518": {
+    "fraction_ai": 0.08250131458044052,
+    "fraction_human": 0.9174987077713013,
+    "prediction": "Human"
+  },
+  "8029a765648241fa7aacf7da3002c154d89048c1526963c4135c6991286e8b44": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "bdd364424cd069e4fd210525da568c90cfb3701457ec9e8bbb0bd6e366d6177f": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8b10fe8ddf79266076617f38776caa01da2ccb51c2a8a207a4d682e382d5f890": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "43cd372d22f51b4a0563f8a97386ac2a0aa66aa20efd074338810f3bd43f7b7b": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a9b2d3a3c10a1b49256ecc101117b5accedc5200eb6ce9a413a363640c557010": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "444704915330649e79663b19a8ad853339ba0d24c02568c52d72ff21f110cb38": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "bc81d240916a0acbb4cb8270a3d2c9fb1d5093c5dfdad44f8f121a0dd308afbc": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "92869374ed501e8751d78ed3a172d2e2dbffc43af2c245e3112b185274e3aaa2": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8d5aacf99c3205047c5d964c0f2f8671404b354be57097a000dcaa9886e8b676": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "b14422981ac7618f4784549aa96da72352e88e7fe17838c55e9c705eeaf45e45": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8c590f2478fce162dbc589ed429e482eb4e9cc3a19dc837fbde2bd8c1a4239c8": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a9a6b7fc7d111c42f651977a3a4064d9727d7871de896a2084010fa8fba70e73": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0bd8d39867fc3d611b0ad5d4da36df1b9c2e3dbdff4a9b12d9a057f931ad249c": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "ec94f487b228e951a3e854e4e1ecbb3dba1cfb694c5ec5fcbd2a54b404b65f42": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "194c32a36236a5aa434f7940db63034afe64ad684bb64f0d34a52f6b492fc122": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "631e3fe2d20e99650f52c0975f1a2c8d417da6581c41631353669c512154c0de": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6438c6463d719e00f42e58db67542029d0e9f071c04c896144cdcf75c5244c5e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "2f6f2765ae2869ada5d4cb703a094c181b5c32195e4039473f57134dd6cc74f7": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a993bda65feda6abce8b4fcf5b01e08614f5c4b9ece5e1d7aea0697eaa500b62": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "7a73a6a9de9fad85bbe4b3f007f304a4c4499d3d54cb9b800e02e836b7aaaa4e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "13b0b83e6ac09ed91307aad9efc1e25fbfae693eab6ae58e0cc399bd9b98fb8f": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "9751f07be35489590bc62776b4b273e0bd8d9b9756c7eeb11aebabe1d7de0e36": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0af7c70f889284b0a50613149727a34938b38f3c0effedd6c375cdf4fad90738": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "90818687d758687e8e351b872161c5b339788a27cdfab0669356ed48e2d420c0": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "75fd8028efda03b1486f0fa9d83f4c380fb5fd17e9930b58ee0200f3ac29b4cb": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e620b5b0492ba1084b9a551e8585823561771a9ee5ff8474c6a48067c00fa73a": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "5e16c8e2bc4f538d8779a069f879e409100ffd97b08faa138ec43a0113b45e40": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "c876e9848f4f8a0b07c5ff4d433d58c96bb1895dc4583b8462b726eccb821ae9": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e888918040f6b382051dbfa7c5837de1d71445c94285fa5bf127bd16783343bd": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a83cdbbfdead3aa0cf6905be2cc8af62c1bf21474459e17eff5c902b9e3890e3": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6f62c081b9d52e8febc9a4ff0664d446d891812c434aec5bacd076700aaecde1": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "3e383e91d69651bf387a3bd48970641610f2ef6b63f7c8d64281bb43675c5cf7": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8a6b99baef48918a071498e7d3caf574b25e09167d4c0a160405fa1bb632b7b6": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "ff5284a63a59e3235ca4c032a9327bbc2e2f82239bcc239012e7039db534fbda": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "439d152b3a5fded9c9103982f903f59fe5589952a6f88a305a62ef6de5ac92a8": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "97b4d8eaff0b2b65357da47b189899902d75d67f189250431db29c00ccd16884": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "abf237b12f501e0494751a9fe3178e73a6023e9dcd6cee2f9479a5e1d0fc7d63": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "86388b65def1429c43240decfd4388523020a286330370cb0f5f27d85ec2a6b8": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6fc24f7c2d9063ceea1f7ff6f2c2e9c42d7770639b435f669fe371ea9ca1fb32": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "f53203d8037cf45ce0a0ec0f439e84a2823d1fbec0e3443bcae01e29306f2ebd": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "0a767376da5c408bdd67bff0e645efd2acef714949eee3dea0887e2189af6a80": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "17e0ffa32283369f5441faf647dfa72b331832ebffff6c3185f49ed0f99f654b": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "1f970aba2fdf9ba68e30adc0381b03a54af6664ba4c97ee87f18fdfb1513fb4c": {
+    "fraction_ai": 0.0,
+    "fraction_human": 0.7115384340286255,
+    "prediction": "Mixed"
+  },
+  "62d616876ea9c78dabd0877d03dee3693129be70178794a212a7ffd9b0e1074d": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "16d724f835197f80d97f7458c83625044388ceb4050bc45d8d647f5843dbb00b": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "b4b6fa68c1c5af4bc7d2190711494eca8531fb649d98fbb6f4ca1c0c2a03d377": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "31c8fad91f4bb7c779beeb772b233b70fa0cecfa1d226ac98d2da075f405195a": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "17b1fbd231661ccbcd6cbe5ff402e49139829c82f696a78e5599c4e62e33a2ca": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8d28ffbc3c3226eaa4f1cb4b7dbca494edde726872bc77283229ee17f41810b2": {
+    "fraction_ai": 0.1578732132911682,
+    "fraction_human": 0.0,
+    "prediction": "Mixed"
+  },
+  "c0458973fe70ae09f192b151abab9abf43f8dff6037d2a67ca2f981ea9168708": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6df8d478d67e4080bae1f72922bcf3449a3e4dfdb448bc100f285addc2e6b22c": {
+    "fraction_ai": 0.0,
+    "fraction_human": 1.0,
+    "prediction": "Human"
+  },
+  "5b985c8d7dbbea795cd45706c202543bd78caaa403d37acd02dfad4030211626": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "a78c6f4238924f1c95425bd54cc8ccd9f2f6c6ac4f3cbc94f36e99bce5c137bd": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "8dea942d4434987084cb0ff3e9b9223d961d7adeec041e181aec38ecb588f9ea": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "142d2de2187995d670ac81360ba1f34fdcf7310562e6544fed7158d2c489d526": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0823c9ca338c28d115508a2bf4ffdedb38d9498bcaeb68aaadb535c700795ee9": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "ea4bb1982f7150a4c3ab1a84cfcc78327f37d2432066d4b30f2340bf7c5b576d": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "b92d55d62e3d4bc70e3ffaf714ff69f07470d09b5c6d2955e0c608858d61f7ce": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "9efd17c8823787f8d760cc1a3934d9cdbe918a6dc7d55a6c52db712061fcc0bd": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "7a090184323d807a19f6c7f28e4c8abaaeea0c92698b3fa7a6e105505d2aa581": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "1bb441794aafb911e951c3cf73b213ebc3174bd0f14ea9d89d4314ac8d8a1eb4": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "39ff4ae2c06cc25208808930a71ac15d41503b9d61048394b6144da1f6fa608e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "1d71686ad85017281e355d2de29eaf87ddcdeaf75db28e3810b06821503fdc34": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "08e8f9a1f5164e489fa024e9e18d25309fb0ce8583f7daed7ef2012c50e48156": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "083f6b8d970dfd55f87b36ad7c64ebd87223b797d44eb4a1a1f85a85dad4c236": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "baa6b3db1f248fca2e627f5e2a5ad4112d0ae95026ec6d4a1d34d9746bbc3419": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "90e03b1711e31b902aec6109a0548d3c907b8f0b36c9b753828028534d41614c": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "f22f01837d82496af6e7686b1f7cae33f1c48d333babcb021b4e215ae1a58538": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0af7763fc01193501d9163e28c26fbe84b656e013fc52a0d8e4a7decbd0161ab": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "13ac207e72069c01e56ca0658e5142124577e1ececebdc2448e128d2d4850d1e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "52f2948d19d01e417d6de937dcf168591126fe79b1982bf7f9ab2c856e5acbf5": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0583e0d4f0685e08ee6539c35b7ce23ce2136c06417bc99caa0eaabd5dc48a4c": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "3bc38c32050ef2aa31950700d40702e1c3f391816a0eb706b52a7ee9ed3cb026": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "fb4acc92ffb50bb8be37007399ed7f43ebbae0ea793537fd44674e5aec9f2cb6": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "e0df77a12913bbb02b5d59e948d95258822830de1b5e70e63b9457644f833320": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "0b6e4fd1c6a8205b683ec4abc0fe30ba0510cb7e4c85ea31f10850b0501cd32e": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "6b62563cb63cce306e88bf4f5026b22b3a40fde83ea0edc802798b93459a4497": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  },
+  "91848279b87f04ef51ab64dd25c3fff19e8c56460f703989a5501341db731701": {
+    "fraction_ai": 1.0,
+    "fraction_human": 0.0,
+    "prediction": "AI"
+  }
+}

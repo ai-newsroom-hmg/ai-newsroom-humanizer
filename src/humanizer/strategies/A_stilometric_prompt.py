@@ -23,7 +23,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from _openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from _openrouter import MODEL_DEFAULT, ORClient  # noqa: E402
 
 if not os.environ.get("PANGRAM_API_KEY"):
     f = Path.home() / ".config" / "pangram" / "key"
@@ -224,7 +224,7 @@ async def main():
     profile = json.loads(PROFILE.read_text(encoding="utf-8"))
     system = build_system_prompt(profile)
     arts = load_articles(LIMIT)
-    print(f"--- Stilometric Loop (Pfad A) ---", flush=True)
+    print("--- Stilometric Loop (Pfad A) ---", flush=True)
     print(f"    Profil: {profile['korpus_n']} Human-Artikel, {profile['saetze_total']} Saetze", flush=True)
     print(f"    Test: {len(arts)} Casdorff-AI-Artikel, max {MAX_ITERS} Iter, T={THRESHOLD}", flush=True)
 
@@ -261,7 +261,7 @@ async def main():
         for r in results:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    print(f"\n=== FERTIG Pfad A: Stilometric Prompt ===")
+    print("\n=== FERTIG Pfad A: Stilometric Prompt ===")
     print(f"  Erfolg: {n_success}/{len(results)} ({n_success/max(len(results),1):.0%})")
     print(f"  Kosten: {total_cost:.4f} USD")
     print(f"  Output: {OUT}")

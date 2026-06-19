@@ -232,7 +232,7 @@ async def main():
         for r in results:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    print(f"\n=== FERTIG Multi-Model ===")
+    print("\n=== FERTIG Multi-Model ===")
     print(f"  Artikel:        {len(results)}")
     print(f"  Erfolg (<{THRESHOLD}): {n_success}/{len(results)} ({n_success/max(len(results),1):.0%})")
     print(f"  Kosten total:   {total_cost:.4f} USD")

@@ -22,7 +22,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from _openrouter import ORClient, MODEL_DEFAULT  # noqa: E402
+from _openrouter import MODEL_DEFAULT, ORClient  # noqa: E402
 
 ROOT = Path.home() / "Projects" / "ki-check"
 INP = ROOT / "data" / "humanize" / "01_casdorff_loop_results.jsonl"
@@ -185,7 +185,7 @@ async def main():
     # Summary
     from collections import Counter
     verdicts = Counter((r["llm_judge"].get("verdict") or "?") for r in results if r)
-    print(f"\n=== Faithfulness-Summary ===")
+    print("\n=== Faithfulness-Summary ===")
     for v, c in verdicts.most_common():
         print(f"  {v}: {c}")
     print(f"  Total LLM cost: {total_cost:.4f} USD")

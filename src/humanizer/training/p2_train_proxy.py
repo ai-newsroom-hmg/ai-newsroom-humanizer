@@ -151,7 +151,7 @@ def main():
         "device": DEVICE,
     }
     OUT_CONFIG.write_text(json.dumps(config, indent=2), encoding="utf-8")
-    print(f"\n=== FERTIG ===")
+    print("\n=== FERTIG ===")
     print(f"  Best val_MAE: {best_val_mae:.4f}")
     print(f"  Model: {OUT_MODEL}")
     print(f"  Config: {OUT_CONFIG}")

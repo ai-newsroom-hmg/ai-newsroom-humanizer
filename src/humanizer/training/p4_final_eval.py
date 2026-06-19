@@ -13,7 +13,6 @@ import hashlib
 import json
 import os
 import sys
-import time
 from pathlib import Path
 
 if not os.environ.get("PANGRAM_API_KEY"):
@@ -77,9 +76,9 @@ async def main():
         CACHE.write_text(json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # Faithfulness
-    print(f"\n--- BGE-M3 Faithfulness ---", flush=True)
-    from sentence_transformers import SentenceTransformer
+    print("\n--- BGE-M3 Faithfulness ---", flush=True)
     import torch
+    from sentence_transformers import SentenceTransformer
     device = "mps" if torch.backends.mps.is_available() else "cpu"
     enc = SentenceTransformer("BAAI/bge-m3", device=device)
 
@@ -130,7 +129,7 @@ async def main():
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     n_bypass_and_faithful = sum(1 for r in out_rows if r["bypass_success"] and r["faithful"])
-    print(f"\n=== FINAL-EVAL ===")
+    print("\n=== FINAL-EVAL ===")
     print(f"  Bypass (pangram_post < 0.2):  {n_bypass}/{len(out_rows)}")
     print(f"  Faithful (BGE-sim >= 0.85):    {n_faithful}/{len(out_rows)}")
     print(f"  BEIDE Erfolg:                  {n_bypass_and_faithful}/{len(out_rows)}")

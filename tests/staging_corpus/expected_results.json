@@ -1,0 +1,29 @@
+{
+  "bypass_short": {
+    "doc_id": "TSP__5d034c5e0101c339052e6b95a3cb320e826d337c",
+    "chars": 895,
+    "n_total": 50,
+    "n_faithful_min": 34,
+    "best_pangram_max": 0.0,
+    "best_bge_min": 0.824,
+    "n_bypass": 7
+  },
+  "bypass_mid": {
+    "doc_id": "BB48B8A7-C8AD-496E-BD9A-B2098A622FFD",
+    "chars": 2468,
+    "n_total": 50,
+    "n_faithful_min": 35,
+    "best_pangram_max": 0.0,
+    "best_bge_min": 0.908,
+    "n_bypass": 4
+  },
+  "hardcase": {
+    "doc_id": "TSP__73fde4c6a3d40d7c686ce5175e54e795e007e443",
+    "chars": 2410,
+    "n_total": 50,
+    "n_faithful_min": 33,
+    "best_pangram_max": 1.0,
+    "best_bge_min": 0.871,
+    "n_bypass": 0
+  }
+}

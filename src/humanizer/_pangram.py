@@ -13,9 +13,12 @@ unbeaufsichtigte Läufe sinnvoll.
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
 import logging
 import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
 import httpx
@@ -89,14 +92,33 @@ def _as_float(v) -> Optional[float]:
 
 
 class PangramClient:
-    def __init__(self, api_key: Optional[str] = None):
-        self._key = api_key or os.environ["PANGRAM_API_KEY"]
+    """Pangram API-Client.
+
+    Modes:
+    - Default (dev): live API-calls.
+    - Staging: `mock_cache_path` set → load JSON cache, lookup per SHA256(text).
+      Cache-Miss raises (kein silent live-fallback). UNBEDINGT-Skill 2 Live-Parity:
+      Cache muss aus echten Live-Calls stammen.
+    """
+
+    def __init__(self, api_key: Optional[str] = None,
+                 mock_cache_path: Optional[Path] = None):
+        self._mock_cache: Optional[dict] = None
+        self._mock_path = mock_cache_path
+        if mock_cache_path:
+            self._mock_cache = json.loads(Path(mock_cache_path).read_text(encoding="utf-8"))
+            log.info("PangramClient: STAGING mode, %d cached entries from %s",
+                     len(self._mock_cache), mock_cache_path)
+            self._key = "STAGING_MOCK"
+        else:
+            self._key = api_key or os.environ["PANGRAM_API_KEY"]
         self._http: Optional[httpx.AsyncClient] = None
 
     async def __aenter__(self):
-        self._http = httpx.AsyncClient(
-            base_url=BASE_URL, timeout=60,
-            headers={"x-api-key": self._key, "Content-Type": "application/json"})
+        if self._mock_cache is None:
+            self._http = httpx.AsyncClient(
+                base_url=BASE_URL, timeout=60,
+                headers={"x-api-key": self._key, "Content-Type": "application/json"})
         return self
 
     async def __aexit__(self, *a):
@@ -105,9 +127,40 @@ class PangramClient:
 
     async def check_bulk(self, items: list[dict], on_progress=None) -> dict[str, PangramResult]:
         """items = [{"id": …, "text": …}] → Ergebnisse je id."""
+        if self._mock_cache is not None:
+            return self._check_via_mock(items)
         if MODE == "bulk":
             return await self._check_via_bulk(items, on_progress)
         return await self._check_via_tasks(items, on_progress)
+
+    def _check_via_mock(self, items: list[dict]) -> dict[str, PangramResult]:
+        """Lookup each item by sha256(text) in mock_cache. Cache-Miss raises."""
+        out: dict[str, PangramResult] = {}
+        missing = []
+        for it in items:
+            sha = hashlib.sha256(it["text"].encode("utf-8")).hexdigest()
+            entry = self._mock_cache.get(sha)
+            if entry is None or "fraction_ai" not in entry:
+                missing.append((it["id"], sha[:12]))
+                continue
+            res = PangramResult(
+                item_id=it["id"],
+                fraction_ai=entry.get("fraction_ai"),
+                fraction_ai_assisted=entry.get("fraction_ai_assisted"),
+                fraction_human=entry.get("fraction_human"),
+                prediction=entry.get("prediction", ""),
+            )
+            out[it["id"]] = res
+        if missing:
+            raise RuntimeError(
+                f"Pangram-MOCK Cache-Miss für {len(missing)} items "
+                f"(IDs {[m[0] for m in missing[:3]]}…). "
+                f"In staging-mode: kein silent live-fallback. "
+                f"Cache path: {self._mock_path}. "
+                f"Lösung: dev-mode für neue Texte verwenden, dann cache füllt sich; "
+                f"oder explizit Test-Korpus auf gecachten Inputs einschränken."
+            )
+        return out
 
     # ---- Einzel-Tasks (Default) ------------------------------------------
 
