@@ -52,6 +52,9 @@ data/test-corpora/target-demo-2026-06-19.txt
 # Lizenzpflichtige Casdorff-Volltexte (Tagesspiegel-Copyright)
 tests/staging_corpus/docs.jsonl
 
+# FPR-Test-Korpus enthält Volltexte aus Genios HMG-Lizenz (Tier-1-Leitmedien Copyright)
+data/fpr-test/
+
 # Big training-pool (rsync from ruediger if needed)
 data/phase2-training-pool/eval.jsonl
 data/phase2-training-pool/train.jsonl
